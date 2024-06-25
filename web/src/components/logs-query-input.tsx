@@ -25,6 +25,7 @@ export const LogsQueryInput: React.FC<LogsQueryInputProps> = ({
   const { t } = useTranslation('plugin__logging-view-plugin');
 
   const [internalValue, setInternalValue] = React.useState(value);
+  const [isStatsShown, setIsStatsShown] = React.useState(false);
   const [isValid, setIsValid] = React.useState(true);
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (
@@ -85,15 +86,51 @@ export const LogsQueryInput: React.FC<LogsQueryInputProps> = ({
           />
         )}
       </div>
-      <div className='co-stats'>
-      <ToggleButton
-            isToggled={false}
-            onToggle={undefined}
-            untoggledText={t('Show Stats')}
-            toggledText={t('Hide Stats')}
-          />
+      <div className="co-stats">
+        <ToggleButton
+          isToggled={isStatsShown}
+          onToggle={setIsStatsShown}
+          untoggledText={t('Show Stats')}
+          toggledText={t('Hide Stats')}
+        />
+        {isStatsShown && onRun && (
+          <div className="co-stats__content">
+            <table>
+              <tr>
+                <tr>Bytes Processed Per Second <td>0 MB/s</td></tr>
+                <tr>Execution Time <td>0 s</td></tr>
+                <tr>Lines Processed Per Second <td>0</td></tr>
+                <tr>Queue Time <td>0 s</td></tr>
+                <tr>Total Bytes Processed <td>0 MB/s</td></tr>
+                <tr>Total Lines Processed <td>0 </td></tr>
+              </tr>
+              <div>Ingester</div>
+                <tr>
+                  <tr>Compressed Bytes <td>0 MB</td></tr>
+                  <tr>Decompressed Bytes <td>0 MB</td></tr>
+                  <tr>Decompressed Lines <td>0 </td></tr>
+                  <tr>Head Chunk Bytes <td>0 B</td></tr>
+                  <tr>Head Chunk Lines <td>0 </td></tr>
+                  <tr>Total Batches<td>0 </td></tr>
+                  <tr>Total Chunks Matched <td>0 </td></tr>
+                  <tr>Total Dupilcated <td>0 </td></tr>
+                  <tr>Total Lines Sent <td> 0</td></tr>
+                  <tr>Total Reached <td>0 </td></tr>
+                </tr>
+              <div>Store</div>
+              <tr>
+                <tr>Compressed Bytes<td>0 MB</td></tr>
+                <tr>Decompressed Bytes<td>0 MB</td></tr>
+                <tr>Decompressed Lines<td>0 </td></tr>
+                <tr>Chunks Download Time<td>0 s</td></tr>
+                <tr>Total Chunks Ref<td>0 </td></tr>
+                <tr>Total Chunks Downloaded<td>0 </td></tr>
+                <tr>Total Duplicates<td>0 </td></tr>
+              </tr>
+            </table>
+          </div>
+        )}
       </div>
-    
     </>
   );
 };
