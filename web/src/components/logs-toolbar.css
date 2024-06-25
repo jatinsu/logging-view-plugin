@@ -10,3 +10,8 @@
   padding-right: var(--pf-c-toolbar__content--PaddingRight);
   padding-left: var(--pf-c-toolbar__content--PaddingLeft);
 }
+
+.co-stats{
+  padding-right: var(--pf-c-toolbar__content--PaddingRight);
+  padding-left: var(--pf-c-toolbar__content--PaddingLeft);
+}
