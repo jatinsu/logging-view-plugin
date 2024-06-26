@@ -2,7 +2,7 @@
 
 set -eou pipefail
 
-PREFER_PODMAN=0
+PREFER_PODMAN=1
 CREATE_ENV=0
 USE_LOCAL_PROXY=1
 LOKI_HOST=0
@@ -125,7 +125,7 @@ if [[ -x "$(command -v podman)" && $PREFER_PODMAN == 1 ]]; then
         podman run --pull always --rm --network=host  --env-file ./scripts/env.list $CONSOLE_IMAGE
     else
         echo "Using podman..."
-        podman run --pull always --rm -p "$CONSOLE_PORT":9000 --env-file ./scripts/env.list $CONSOLE_IMAGE
+        podman run --pull always --rm -p "$CONSOLE_PORT":9000 --env-file ./scripts/env.list --arch=amd64 $CONSOLE_IMAGE
     fi
 else
     echo "Using docker..."
