@@ -47,8 +47,7 @@ export const useURLState = ({
   const initialResorcesShown =
     (queryParams.get(SHOW_RESOURCES_PARAM_KEY) ?? DEFAULT_SHOW_RESOURCES) === '1';
 
-  const intitalStatsShown = 
-    (queryParams.get(SHOW_STATS_PARAM_KEY) ?? DEFAULT_SHOW_STATS) === '1';
+  const intitalStatsShown = (queryParams.get(SHOW_STATS_PARAM_KEY) ?? DEFAULT_SHOW_STATS) === '1';
 
   const [query, setQuery] = React.useState(initialQuery);
   const [tenant, setTenant] = React.useState(initialTenant);
@@ -80,7 +79,7 @@ export const useURLState = ({
   const setShowStatsInURL = (showStats: boolean) => {
     queryParams.set(SHOW_STATS_PARAM_KEY, showStats ? '1' : '0');
     history.push(`${location.pathname}?${queryParams.toString()}`);
-  }
+  };
 
   const setQueryInURL = (newQuery: string) => {
     const trimmedQuery = newQuery.trim();
@@ -116,7 +115,7 @@ export const useURLState = ({
     setTenant(tenantValue);
     setDirection(getDirectionValue(directionValue));
     setAreResourcesShown(showResourcesValue === '1');
-    setAreStatsShown(showStatsValue === '1')
+    setAreStatsShown(showStatsValue === '1');
     setFilters(filtersFromQuery({ query: queryValue, attributes }));
     setTimeRange((prevTimeRange) => {
       if (!timeRangeStartValue || !timeRangeEndValue) {
