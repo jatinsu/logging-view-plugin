@@ -374,7 +374,6 @@ export const LogsTable: React.FC<LogsTableProps> = ({
     direction: direction === 'backward' ? 'desc' : 'asc',
   });
   const tableData = React.useMemo(() => aggregateStreamLogData(logsData), [logsData]);
-  const statsData = React.useMemo(() => logsData?.data.stats, [logsData]);
   const { isKorrel8rReachable } = useKorrel8r();
 
   const handleRowToggle = (_event: React.MouseEvent, rowIndex: number) => {
@@ -430,7 +429,7 @@ export const LogsTable: React.FC<LogsTableProps> = ({
   return (
     <div data-test={TestIds.LogsTable}>
       {showStats && (
-        <div>{JSON.stringify(statsData)}</div>
+        <div>{JSON.stringify(logsData?.data.stats)}</div>
       )}
       {children}
       <TableComposable
