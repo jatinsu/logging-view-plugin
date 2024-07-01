@@ -216,7 +216,7 @@ const LogsPage: React.FC = () => {
           filters={filters}
           onFiltersChange={handleFiltersChange}
         />
-        
+
         {isLoadingLogsData ? (
           <CenteredContainer>{t('Loading...')}</CenteredContainer>
         ) : resultIsMetric ? (
