@@ -50,10 +50,9 @@ export interface StreamsResult {
 }
 
 type Chunk = Record<string, number>;
-type Store = Record<string, number> & {chunk?:Chunk}
-type Ingester = Record<string, number> & {store?:Store}
-type Querier = Record<string, number> & {store?:Store}
-
+type Store = Record<string, number> & { chunk?: Chunk };
+type Ingester = Record<string, number> & { store?: Store };
+type Querier = Record<string, number> & { store?: Store };
 
 export type QueryRangeResponse<T = MatrixResult | StreamsResult> = {
   status: string;
