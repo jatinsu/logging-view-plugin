@@ -425,11 +425,148 @@ export const LogsTable: React.FC<LogsTableProps> = ({
   };
 
   const colSpan = isKorrel8rReachable ? columns.length + 3 : columns.length + 2;
-
   return (
     <div data-test={TestIds.LogsTable}>
       {showStats && (
-        <div>{JSON.stringify(logsData?.data.stats)}</div>
+          <table className='co-stats__content'>
+            <b>Summary</b>
+            <tr>
+              <tr>
+                <td>Bytes Processed Per Second </td>
+                <td> {logsData?.data.stats.summary.bytesProcessedPerSecond} B/s</td>
+              </tr>
+              <tr>
+                <td> Lines Processed Per Second</td> 
+                <td>{logsData?.data.stats.summary.linesProcessedPerSecond}</td>
+              </tr>
+              <tr>
+                <td>Bytes Processed Per Second</td>
+                <td>{logsData?.data.stats.summary.totalBytesProcessed}</td>
+              </tr>
+              <tr>
+                <td>Total Lines Processed</td> 
+                <td>{logsData?.data.stats.summary.totalLinesProcessed}</td>
+              </tr>
+              <tr>
+                <td>Execution Time</td> 
+                <td>{logsData?.data.stats.summary.execTime} s</td>
+              </tr>
+              <tr>
+                <td>Queue Time</td>
+                <td>{logsData?.data.stats.summary.queueTime} s</td>
+              </tr>
+              <tr>
+                <td>Sub Queries</td>
+                <td>{logsData?.data.stats.summary.subqueries}</td>
+              </tr>
+              <tr>
+                <td>Total Entries Returned</td>
+                <td>{logsData?.data.stats.summary.totalEntriesReturned}</td>
+              </tr>
+              <tr>
+                <td>Splits</td>
+                <td>{logsData?.data.stats.summary.splits}</td>
+              </tr>
+              <tr>
+                <td>Shards</td>
+                <td>{logsData?.data.stats.summary.shards}</td>
+              </tr>
+            </tr>
+            <b>Ingester</b>
+            <tr>
+              <tr>
+                <td>Total Reached</td>
+                <td>{logsData?.data.stats.ingester.totalReached} B</td>
+              </tr>
+              <tr>
+                <td>Total Chunks Matched</td>
+                <td>{logsData?.data.stats.ingester.totalChunksMatched}</td>
+              </tr>
+              <tr>
+                <td>Total Batches</td>
+                <td>{logsData?.data.stats.ingester.totalBatches}</td>
+              </tr>
+              <tr>
+                <td>Total Lines Sent</td>
+                <td>{logsData?.data.stats.ingester.totalLinesSent}</td>
+              </tr>
+              <tr>
+                <td>Total Chunks Referenced</td>
+                <td>{(logsData?.data.stats.ingester.store as any).totalChunksRef}</td>
+              </tr>
+              <tr>
+                <td>Total Chunks Downloaded</td>
+                <td>{(logsData?.data.stats.ingester.store as any).totalChunksDownloaded}</td>
+              </tr>
+              <tr>
+                <td>Chunks Download Time</td>
+                <td>{(logsData?.data.stats.ingester.store as any).chunksDownloadTime}</td>
+              </tr>
+              <tr>
+                <td>Head Chunk Bytes</td>
+                <td>{(logsData?.data.stats.ingester.store as any).chunk.headChunkBytes}</td>
+              </tr>
+              <tr>
+                <td>Head Chunk Lines</td>
+                <td>{(logsData?.data.stats.ingester.store as any).chunk.headChunkLines}</td>
+              </tr>
+              <tr>
+                <td>Decompressed Bytes</td>
+                <td>{(logsData?.data.stats.ingester.store as any).chunk.decompressedBytes}</td>
+              </tr>
+              <tr>
+                <td>Decompressed Lines</td>
+                <td>{(logsData?.data.stats.ingester.store as any).chunk.decompressedLines} </td>
+              </tr>
+              <tr>
+                <td>Compressed Bytes</td>
+                <td>{(logsData?.data.stats.ingester.store as any).chunk.compressedBytes}</td>
+              </tr>
+              <tr>
+                <td>Total Duplicates</td>
+                <td>{(logsData?.data.stats.ingester.store as any).chunk.totalDuplicates}</td>
+              </tr>
+            </tr>
+            <b>Store</b>
+            <tr>
+              <tr>
+                <td>Total Chunks Referenced</td>
+                <td>{(logsData?.data.stats.querier.store as any).totalChunksRef}</td>
+              </tr>
+                <tr>
+                  <td>Total Chunks Downloaded</td>
+                  <td>{(logsData?.data.stats.querier.store as any).totalChunksDownloaded}</td>
+                </tr>
+                <tr>
+                  <td>Chunks Download Time</td>
+                  <td>{(logsData?.data.stats.querier.store as any).chunksDownloadTime}</td>
+                </tr>
+                <tr>
+                  <td>Head Chunk Bytes</td>
+                  <td>{(logsData?.data.stats.querier.store as any).chunk.headChunkBytes}</td>
+                </tr>
+                <tr>
+                  <td>Head Chunk Lines</td>
+                  <td>{(logsData?.data.stats.querier.store as any).chunk.headChunkLines}</td>
+                </tr>
+                <tr>
+                  <td>Decompressed Bytes</td>
+                  <td>{(logsData?.data.stats.querier.store as any).chunk.decompressedBytes}</td>
+                </tr>
+                <tr>
+                  <td>Decompressed Lines</td>
+                  <td>{(logsData?.data.stats.querier.store as any).chunk.decompressedLines} </td>
+                </tr>
+                <tr>
+                  <td>Compressed Bytes</td>
+                  <td>{(logsData?.data.stats.querier.store as any).chunk.compressedBytes}</td>
+                </tr>
+                <tr>
+                  <td>Total Duplicates</td>
+                  <td>{(logsData?.data.stats.querier.store as any).chunk.totalDuplicates}</td>
+                </tr>
+            </tr>
+          </table>
       )}
       {children}
       <TableComposable
