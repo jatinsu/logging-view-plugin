@@ -429,123 +429,215 @@ export const LogsTable: React.FC<LogsTableProps> = ({
   return (
     <div data-test={TestIds.LogsTable}>
       {showStats && (
-        <Table className="co-stats__content" variant='compact'>
-          <Thead>
-            <Th className='table-header'>Summary</Th>
-            <Th></Th>
-            <Th className='table-header'>Ingester</Th>
-            <Th></Th>
-            <Th className='table-header'>Storage</Th>
-            <Th></Th>
-          </Thead>
-          
-          <Tbody>
-            <Tr>
-              <Td>Bytes Processed Per Second:</Td>
-              <Td><strong>{logsData?.data.stats.summary.bytesProcessedPerSecond ?? 'NA'}</strong> B/s</Td>
-              <Td>Total Reached:</Td>
-              <Td><strong>{logsData?.data.stats.ingester.totalReached ?? 'NA'}</strong> B</Td>
-              <Td>Total Chunks Referenced:</Td>
-              <Td><strong>{logsData?.data.stats.querier.store?.totalChunksRef ?? 'NA'}</strong></Td>
-            </Tr>
-            <Tr>
-              <Td> Lines Processed Per Second:</Td>
-              <Td><strong>{logsData?.data.stats.summary.linesProcessedPerSecond ?? 'NA'}</strong></Td>
-              <Td>Total Chunks Matched:</Td>
-              <Td><strong>{logsData?.data.stats.ingester.totalChunksMatched ?? 'NA'}</strong></Td>
-              <Td>Total Chunks Downloaded:</Td>
-              <Td><strong>{logsData?.data.stats.querier.store?.totalChunksDownloaded ?? 'NA'}</strong></Td>
-            </Tr>
-            <Tr>
-              <Td>Bytes Processed Per Second:</Td>
-              <Td><strong>{logsData?.data.stats.summary.totalBytesProcessed ?? 'NA'}</strong></Td>
-              <Td>Total Batches:</Td>
-              <Td><strong>{logsData?.data.stats.ingester.totalBatches ?? 'NA'}</strong></Td>
-              <Td>Chunks Download Time:</Td>
-              <Td><strong>{logsData?.data.stats.querier.store?.chunksDownloadTime ?? 'NA'}</strong></Td>
-            </Tr>
-            <Tr>
-              <Td>Total Lines Processed:</Td>
-              <Td><strong>{logsData?.data.stats.summary.totalLinesProcessed ?? 'NA'}</strong></Td>
-              <Td>Total Lines Sent:</Td>
-              <Td><strong>{logsData?.data.stats.ingester.totalLinesSent ?? 'NA'}</strong></Td>
-              <Td>Head Chunk Bytes:</Td>
-              <Td><strong>{logsData?.data.stats.querier.store?.chunk?.headChunkBytes ?? 'NA'}</strong></Td>
-            </Tr>
-            <Tr>
-              <Td>Execution Time:</Td>
-              <Td><strong>{logsData?.data.stats.summary.execTime ?? 'NA'} s</strong></Td>
-              <Td>Total Chunks Referenced:</Td>
-              <Td><strong>{logsData?.data.stats.ingester.store?.totalChunksRef ?? 'NA'}</strong></Td>
-              <Td>Head Chunk Lines:</Td>
-              <Td><strong>{logsData?.data.stats.querier.store?.chunk?.headChunkLines ?? 'NA'}</strong></Td>
-            </Tr>
-            <Tr>
-              <Td>Queue Time:</Td>
-              <Td><strong>{logsData?.data.stats.summary.queueTime ?? 'NA'} s</strong></Td>
-              <Td>Total Chunks Downloaded:</Td>
-              <Td><strong>{logsData?.data.stats.ingester.store?.totalChunksDownloaded ?? 'NA'}</strong> </Td>
-              <Td>Decompressed Bytes:</Td>
-              <Td><strong>{logsData?.data.stats.querier.store?.chunk?.decompressedBytes ?? 'NA'}</strong></Td>
-            </Tr>
-            <Tr>
-              <Td>Sub Queries:</Td>
-              <Td><strong>{logsData?.data.stats.summary.subqueries ?? 'NA'}</strong></Td>
-              <Td>Chunks Download Time:</Td>
-              <Td><strong>{logsData?.data.stats.ingester.store?.chunksDownloadTime ?? 'NA'}</strong></Td>
-              <Td>Decompressed Lines:</Td>
-              <Td><strong>{logsData?.data.stats.querier.store?.chunk?.decompressedLines ?? 'NA'} </strong></Td>
-            </Tr>
-            <Tr>
-              <Td>Total Entries Returned:</Td>
-              <Td><strong>{logsData?.data.stats.summary.totalEntriesReturned ?? 'NA'}</strong></Td>
-              <Td>Head Chunk Bytes:</Td>
-              <Td><strong>{logsData?.data.stats.ingester.store?.chunk?.headChunkBytes ?? 'NA'}</strong></Td>
-              <Td>Compressed Bytes:</Td>
-              <Td><strong>{logsData?.data.stats.querier.store?.chunk?.compressedBytes ?? 'NA'}</strong></Td>
-            </Tr>
-            <Tr>
-              <Td>Splits:</Td>
-              <Td><strong>{logsData?.data.stats.summary.splits ?? 'NA'}</strong></Td>
-              <Td>Head Chunk Lines:</Td>
-              <Td><strong>{logsData?.data.stats.ingester.store?.chunk?.headChunkLines ?? 'NA'}</strong></Td>
-              <Td>Total Duplicates:</Td>
-              <Td><strong>{logsData?.data.stats.querier.store?.chunk?.totalDuplicates ?? 'NA'}</strong></Td>
-            </Tr>
-            <Tr>
-              <Td>Shards:</Td>
-              <Td><strong>{logsData?.data.stats.summary.shards ?? 'NA'}</strong></Td>
-              <Td>Decompressed Bytes:</Td>
-              <Td><strong>{logsData?.data.stats.ingester.store?.chunk?.decompressedBytes ?? 'NA'}</strong></Td>
-              <Td></Td>
-              <Td></Td>
-            </Tr>
-            <Tr>
-              <Td></Td>
-              <Td></Td>
-              <Td>Decompressed Lines:</Td>
-              <Td><strong>{logsData?.data.stats.ingester.store?.chunk?.decompressedLines ?? 'NA'}</strong> </Td>
-              <Td></Td>
-              <Td></Td>
-            </Tr>
-            <Tr>
-              <Td></Td>
-              <Td></Td>
-              <Td>Compressed Bytes:</Td>
-              <Td><strong>{logsData?.data.stats.ingester.store?.chunk?.compressedBytes ?? 'NA'}</strong></Td>
-              <Td></Td>
-              <Td></Td>
-            </Tr>
-            <Tr>
-              <Td></Td>
-              <Td></Td>
-              <Td>Total Duplicates:</Td>
-              <Td ><strong>{logsData?.data.stats.ingester.store?.chunk?.totalDuplicates ?? 'NA'}</strong></Td>
-              <Td></Td>
-              <Td></Td>
-            </Tr>
-          </Tbody>
-        </Table>
+        <div>
+          <div>Statistics</div>
+          <div className='summary'>
+            
+            <Table className="co-stats__content" variant="compact">
+              <Thead>
+                <Th className="table-header">Summary</Th>
+                <Th></Th>
+                <Th className="table-header">Ingester</Th>
+                <Th></Th>
+                <Th className="table-header">Storage</Th>
+                <Th></Th>
+              </Thead>
+
+              <Tbody>
+                <Tr>
+                  <Td>Bytes Processed Per Second:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.summary.bytesProcessedPerSecond ?? 'NA'}</strong> B/s
+                  </Td>
+                  <Td>Total Reached:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.ingester.totalReached ?? 'NA'}</strong> B
+                  </Td>
+                  <Td>Total Chunks Referenced:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.querier.store?.totalChunksRef ?? 'NA'}</strong>
+                  </Td>
+                </Tr>
+                <Tr>
+                  <Td> Lines Processed Per Second:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.summary.linesProcessedPerSecond ?? 'NA'}</strong>
+                  </Td>
+                  <Td>Total Chunks Matched:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.ingester.totalChunksMatched ?? 'NA'}</strong>
+                  </Td>
+                  <Td>Total Chunks Downloaded:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.querier.store?.totalChunksDownloaded ?? 'NA'}</strong>
+                  </Td>
+                </Tr>
+                <Tr>
+                  <Td>Total Bytes Processed</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.summary.totalBytesProcessed ?? 'NA'} B</strong>
+                  </Td>
+                  <Td>Total Batches:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.ingester.totalBatches ?? 'NA'}</strong>
+                  </Td>
+                  <Td>Chunks Download Time:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.querier.store?.chunksDownloadTime ?? 'NA'} s</strong>
+                  </Td>
+                </Tr>
+                <Tr>
+                  <Td>Total Lines Processed:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.summary.totalLinesProcessed ?? 'NA'}</strong>
+                  </Td>
+                  <Td>Total Lines Sent:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.ingester.totalLinesSent ?? 'NA'}</strong>
+                  </Td>
+                  <Td>Head Chunk Bytes:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.querier.store?.chunk?.headChunkBytes ?? 'NA'}</strong>
+                  </Td>
+                </Tr>
+                <Tr>
+                  <Td>Execution Time:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.summary.execTime ?? 'NA'} s</strong>
+                  </Td>
+                  <Td>Total Chunks Referenced:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.ingester.store?.totalChunksRef ?? 'NA'}</strong>
+                  </Td>
+                  <Td>Head Chunk Lines:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.querier.store?.chunk?.headChunkLines ?? 'NA'}</strong>
+                  </Td>
+                </Tr>
+                <Tr>
+                  <Td>Queue Time:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.summary.queueTime ?? 'NA'} s</strong>
+                  </Td>
+                  <Td>Total Chunks Downloaded:</Td>
+                  <Td>
+                    <strong>
+                      {logsData?.data.stats.ingester.store?.totalChunksDownloaded ?? 'NA'}
+                    </strong>{' '}
+                  </Td>
+                  <Td>Decompressed Bytes:</Td>
+                  <Td>
+                    <strong>
+                      {logsData?.data.stats.querier.store?.chunk?.decompressedBytes ?? 'NA'} B
+                    </strong>
+                  </Td>
+                </Tr>
+                <Tr>
+                  <Td>Sub Queries:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.summary.subqueries ?? 'NA'}</strong>
+                  </Td>
+                  <Td>Chunks Download Time:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.ingester.store?.chunksDownloadTime ?? 'NA'} s</strong>
+                  </Td>
+                  <Td>Decompressed Lines:</Td>
+                  <Td>
+                    <strong>
+                      {logsData?.data.stats.querier.store?.chunk?.decompressedLines ?? 'NA'}{' '}
+                    </strong>
+                  </Td>
+                </Tr>
+                <Tr>
+                  <Td>Total Entries Returned:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.summary.totalEntriesReturned ?? 'NA'}</strong>
+                  </Td>
+                  <Td>Head Chunk Bytes:</Td>
+                  <Td>
+                    <strong>
+                      {logsData?.data.stats.ingester.store?.chunk?.headChunkBytes ?? 'NA'}
+                    </strong>
+                  </Td>
+                  <Td>Compressed Bytes:</Td>
+                  <Td>
+                    <strong>
+                      {logsData?.data.stats.querier.store?.chunk?.compressedBytes ?? 'NA'} B
+                    </strong>
+                  </Td>
+                </Tr>
+                <Tr>
+                  <Td>Splits:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.summary.splits ?? 'NA'}</strong>
+                  </Td>
+                  <Td>Head Chunk Lines:</Td>
+                  <Td>
+                    <strong>
+                      {logsData?.data.stats.ingester.store?.chunk?.headChunkLines ?? 'NA'}
+                    </strong>
+                  </Td>
+                  <Td>Total Duplicates:</Td>
+                  <Td>
+                    <strong>
+                      {logsData?.data.stats.querier.store?.chunk?.totalDuplicates ?? 'NA'}
+                    </strong>
+                  </Td>
+                </Tr>
+                <Tr>
+                  <Td>Shards:</Td>
+                  <Td>
+                    <strong>{logsData?.data.stats.summary.shards ?? 'NA'}</strong>
+                  </Td>
+                  <Td>Decompressed Bytes:</Td>
+                  <Td>
+                    <strong>
+                      {logsData?.data.stats.ingester.store?.chunk?.decompressedBytes ?? 'NA'} B
+                    </strong>
+                  </Td>
+                  <Td></Td>
+                  <Td></Td>
+                </Tr>
+                <Tr>
+                  <Td></Td>
+                  <Td></Td>
+                  <Td>Decompressed Lines:</Td>
+                  <Td>
+                    <strong>
+                      {logsData?.data.stats.ingester.store?.chunk?.decompressedLines ?? 'NA'}
+                    </strong>{' '}
+                  </Td>
+                  <Td></Td>
+                  <Td></Td>
+                </Tr>
+                <Tr>
+                  <Td></Td>
+                  <Td></Td>
+                  <Td>Compressed Bytes:</Td>
+                  <Td>
+                    <strong>
+                      {logsData?.data.stats.ingester.store?.chunk?.compressedBytes ?? 'NA'} B
+                    </strong>
+                  </Td>
+                  <Td></Td>
+                  <Td></Td>
+                </Tr>
+                <Tr>
+                  <Td></Td>
+                  <Td></Td>
+                  <Td>Total Duplicates:</Td>
+                  <Td>
+                    <strong>
+                      {logsData?.data.stats.ingester.store?.chunk?.totalDuplicates ?? 'NA'}
+                    </strong>
+                  </Td>
+                  <Td></Td>
+                  <Td></Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </div>
+        </div>
       )}
       {children}
       <TableComposable

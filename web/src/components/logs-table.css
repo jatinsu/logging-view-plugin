@@ -105,9 +105,8 @@
 }
 
 .summary{
-  width: 33%;
-  float: left;
   padding: 20px;
+  padding-bottom: 40px;
 }
 
 .table-header{
