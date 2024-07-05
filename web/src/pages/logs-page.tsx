@@ -208,8 +208,8 @@ const LogsPage: React.FC = () => {
           onStreamingToggle={handleToggleStreaming}
           enableStreaming={config.isStreamingEnabledInDefaultPage}
           showResources={areResourcesShown}
-          showStats={areStatsShown}
           onShowResourcesToggle={setShowResourcesInURL}
+          showStats={areStatsShown}
           onShowStatsToggle={setShowStatsInURL}
           isDisabled={isQueryEmpty}
           attributeList={attributeList}
@@ -241,7 +241,6 @@ const LogsPage: React.FC = () => {
             isLoadingMore={isLoadingMoreLogsData}
             hasMoreLogsData={hasMoreLogsData}
             showResources={areResourcesShown}
-            // Should this be where logic is held?
             showStats={areStatsShown}
             direction={direction}
             isStreaming={isStreaming}
