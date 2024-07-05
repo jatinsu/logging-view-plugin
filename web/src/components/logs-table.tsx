@@ -1,5 +1,13 @@
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
-import { Alert, Button, Split, SplitItem, TextVariants, Text } from '@patternfly/react-core';
+import {
+  Alert,
+  Button,
+  Split,
+  SplitItem,
+  TextVariants,
+  Text,
+  Tooltip,
+} from '@patternfly/react-core';
 import {
   ExpandableRowContent,
   ISortBy,
@@ -431,8 +439,7 @@ export const LogsTable: React.FC<LogsTableProps> = ({
       {showStats && (
         <div>
           <div>Statistics</div>
-          <div className='summary'>
-            
+          <div className="summary">
             <Table className="co-stats__content" variant="compact">
               <Thead>
                 <Th className="table-header">Summary</Th>
@@ -445,151 +452,249 @@ export const LogsTable: React.FC<LogsTableProps> = ({
 
               <Tbody>
                 <Tr>
-                  <Td>Bytes Processed Per Second:</Td>
+                  <Tooltip content="Total of bytes processed per second">
+                    <Td>Bytes Processed Per Second:</Td>
+                  </Tooltip>
                   <Td>
-                    <strong>{logsData?.data.stats.summary.bytesProcessedPerSecond ?? 'NA'}</strong> B/s
+                    <strong>
+                      {logsData?.data.stats.summary.bytesProcessedPerSecond ?? 'NA'} B/s{' '}
+                    </strong>
                   </Td>
-                  <Td>Total Reached:</Td>
+
+                  <Tooltip content="Amount of ingesters reached">
+                    <Td>Total Reached:</Td>
+                  </Tooltip>
                   <Td>
-                    <strong>{logsData?.data.stats.ingester.totalReached ?? 'NA'}</strong> B
+                    <strong>{logsData?.data.stats.ingester.totalReached ?? 'NA'} B</strong>
                   </Td>
-                  <Td>Total Chunks Referenced:</Td>
+
+                  <Tooltip content="Total chunks found in the index for the current query">
+                    <Td>Total Chunks Referenced:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>{logsData?.data.stats.querier.store?.totalChunksRef ?? 'NA'}</strong>
                   </Td>
                 </Tr>
+
                 <Tr>
-                  <Td> Lines Processed Per Second:</Td>
+                  <Tooltip content="Total lines processed per second">
+                    <Td> Lines Processed Per Second:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>{logsData?.data.stats.summary.linesProcessedPerSecond ?? 'NA'}</strong>
                   </Td>
-                  <Td>Total Chunks Matched:</Td>
+
+                  <Tooltip content="Total chunks matched by ingesters">
+                    <Td>Total Chunks Matched:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>{logsData?.data.stats.ingester.totalChunksMatched ?? 'NA'}</strong>
                   </Td>
-                  <Td>Total Chunks Downloaded:</Td>
+
+                  <Tooltip content="Total of chunks downloaded">
+                    <Td>Total Chunks Downloaded:</Td>
+                  </Tooltip>
                   <Td>
-                    <strong>{logsData?.data.stats.querier.store?.totalChunksDownloaded ?? 'NA'}</strong>
+                    <strong>
+                      {logsData?.data.stats.querier.store?.totalChunksDownloaded ?? 'NA'}
+                    </strong>
                   </Td>
                 </Tr>
+
                 <Tr>
-                  <Td>Total Bytes Processed</Td>
+                  <Tooltip content="Total amount of bytes processed overall for this request">
+                    <Td>Total Bytes Processed</Td>
+                  </Tooltip>
                   <Td>
                     <strong>{logsData?.data.stats.summary.totalBytesProcessed ?? 'NA'} B</strong>
                   </Td>
-                  <Td>Total Batches:</Td>
+
+                  <Tooltip content="Total batches sent by ingesters">
+                    <Td>Total Batches:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>{logsData?.data.stats.ingester.totalBatches ?? 'NA'}</strong>
                   </Td>
-                  <Td>Chunks Download Time:</Td>
+
+                  <Tooltip content="Total time spent downloading chunks in seconds">
+                    <Td>Chunks Download Time:</Td>
+                  </Tooltip>
                   <Td>
-                    <strong>{logsData?.data.stats.querier.store?.chunksDownloadTime ?? 'NA'} s</strong>
+                    <strong>
+                      {logsData?.data.stats.querier.store?.chunksDownloadTime ?? 'NA'} s
+                    </strong>
                   </Td>
                 </Tr>
+
                 <Tr>
-                  <Td>Total Lines Processed:</Td>
+                  <Tooltip content="Total amount of lines processed overall for this request">
+                    <Td>Total Lines Processed:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>{logsData?.data.stats.summary.totalLinesProcessed ?? 'NA'}</strong>
                   </Td>
-                  <Td>Total Lines Sent:</Td>
+
+                  <Tooltip content="Total lines sent by ingesters">
+                    <Td>Total Lines Sent:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>{logsData?.data.stats.ingester.totalLinesSent ?? 'NA'}</strong>
                   </Td>
-                  <Td>Head Chunk Bytes:</Td>
+
+                  <Tooltip content="Total bytes read from store head chunks">
+                    <Td>Head Chunk Bytes:</Td>
+                  </Tooltip>
                   <Td>
-                    <strong>{logsData?.data.stats.querier.store?.chunk?.headChunkBytes ?? 'NA'}</strong>
+                    <strong>
+                      {logsData?.data.stats.querier.store?.chunk?.headChunkBytes ?? 'NA'} B
+                    </strong>
                   </Td>
                 </Tr>
+
                 <Tr>
-                  <Td>Execution Time:</Td>
+                  <Tooltip content="Total execution time in seconds">
+                    <Td>Execution Time:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>{logsData?.data.stats.summary.execTime ?? 'NA'} s</strong>
                   </Td>
-                  <Td>Total Chunks Referenced:</Td>
+
+                  <Tooltip content="Total chunks found in the index for the current query by ingesters">
+                    <Td>Total Chunks Referenced:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>{logsData?.data.stats.ingester.store?.totalChunksRef ?? 'NA'}</strong>
                   </Td>
-                  <Td>Head Chunk Lines:</Td>
+
+                  <Tooltip content="Total lines read from store head chunks">
+                    <Td>Head Chunk Lines:</Td>
+                  </Tooltip>
                   <Td>
-                    <strong>{logsData?.data.stats.querier.store?.chunk?.headChunkLines ?? 'NA'}</strong>
+                    <strong>
+                      {logsData?.data.stats.querier.store?.chunk?.headChunkLines ?? 'NA'}
+                    </strong>
                   </Td>
                 </Tr>
+
                 <Tr>
-                  <Td>Queue Time:</Td>
+                  <Tooltip content="Total queue time in seconds">
+                    <Td>Queue Time:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>{logsData?.data.stats.summary.queueTime ?? 'NA'} s</strong>
                   </Td>
-                  <Td>Total Chunks Downloaded:</Td>
+
+                  <Tooltip content="Total of chunks downloaded">
+                    <Td>Total Chunks Downloaded:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>
                       {logsData?.data.stats.ingester.store?.totalChunksDownloaded ?? 'NA'}
                     </strong>{' '}
                   </Td>
-                  <Td>Decompressed Bytes:</Td>
+
+                  <Tooltip content="Total bytes decompressed and processed by store">
+                    <Td>Decompressed Bytes:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>
                       {logsData?.data.stats.querier.store?.chunk?.decompressedBytes ?? 'NA'} B
                     </strong>
                   </Td>
                 </Tr>
+
                 <Tr>
-                  <Td>Sub Queries:</Td>
+                  <Tooltip content="Total amount of sub queries">
+                    <Td>Sub Queries:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>{logsData?.data.stats.summary.subqueries ?? 'NA'}</strong>
                   </Td>
-                  <Td>Chunks Download Time:</Td>
+
+                  <Tooltip content="Total time spent downloading chunks in seconds">
+                    <Td>Chunks Download Time:</Td>
+                  </Tooltip>
                   <Td>
-                    <strong>{logsData?.data.stats.ingester.store?.chunksDownloadTime ?? 'NA'} s</strong>
+                    <strong>
+                      {logsData?.data.stats.ingester.store?.chunksDownloadTime ?? 'NA'} s
+                    </strong>
                   </Td>
-                  <Td>Decompressed Lines:</Td>
+
+                  <Tooltip content="Total lines decompressed and processed by the store">
+                    <Td>Decompressed Lines:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>
                       {logsData?.data.stats.querier.store?.chunk?.decompressedLines ?? 'NA'}{' '}
                     </strong>
                   </Td>
                 </Tr>
+
                 <Tr>
-                  <Td>Total Entries Returned:</Td>
+                  <Tooltip content="Total amount of entries">
+                    <Td>Total Entries Returned:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>{logsData?.data.stats.summary.totalEntriesReturned ?? 'NA'}</strong>
                   </Td>
-                  <Td>Head Chunk Bytes:</Td>
+
+                  <Tooltip content="Total bytes read from ingesters head chunks">
+                    <Td>Head Chunk Bytes:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>
-                      {logsData?.data.stats.ingester.store?.chunk?.headChunkBytes ?? 'NA'}
+                      {logsData?.data.stats.ingester.store?.chunk?.headChunkBytes ?? 'NA'} B
                     </strong>
                   </Td>
-                  <Td>Compressed Bytes:</Td>
+
+                  <Tooltip content="Total bytes of compressed chunks (blocks) processed by the store">
+                    <Td>Compressed Bytes:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>
                       {logsData?.data.stats.querier.store?.chunk?.compressedBytes ?? 'NA'} B
                     </strong>
                   </Td>
                 </Tr>
+
                 <Tr>
-                  <Td>Splits:</Td>
+                  <Tooltip content="Total amount of splits">
+                    <Td>Splits:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>{logsData?.data.stats.summary.splits ?? 'NA'}</strong>
                   </Td>
-                  <Td>Head Chunk Lines:</Td>
+
+                  <Tooltip content="Total lines read from ingesters head chunks">
+                    <Td>Head Chunk Lines:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>
                       {logsData?.data.stats.ingester.store?.chunk?.headChunkLines ?? 'NA'}
                     </strong>
                   </Td>
-                  <Td>Total Duplicates:</Td>
+
+                  <Tooltip content="Total of duplicates removed from replication">
+                    <Td>Total Duplicates:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>
                       {logsData?.data.stats.querier.store?.chunk?.totalDuplicates ?? 'NA'}
                     </strong>
                   </Td>
                 </Tr>
+
                 <Tr>
-                  <Td>Shards:</Td>
+                  <Tooltip content="Total of shards">
+                    <Td>Shards:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>{logsData?.data.stats.summary.shards ?? 'NA'}</strong>
                   </Td>
-                  <Td>Decompressed Bytes:</Td>
+
+                  <Tooltip content="Total bytes decompressed and processed by ingesters">
+                    <Td>Decompressed Bytes:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>
                       {logsData?.data.stats.ingester.store?.chunk?.decompressedBytes ?? 'NA'} B
@@ -598,10 +703,13 @@ export const LogsTable: React.FC<LogsTableProps> = ({
                   <Td></Td>
                   <Td></Td>
                 </Tr>
+
                 <Tr>
                   <Td></Td>
                   <Td></Td>
-                  <Td>Decompressed Lines:</Td>
+                  <Tooltip content="Total lines decompressed and processed by ingesters">
+                    <Td>Decompressed Lines:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>
                       {logsData?.data.stats.ingester.store?.chunk?.decompressedLines ?? 'NA'}
@@ -610,10 +718,13 @@ export const LogsTable: React.FC<LogsTableProps> = ({
                   <Td></Td>
                   <Td></Td>
                 </Tr>
+
                 <Tr>
                   <Td></Td>
                   <Td></Td>
-                  <Td>Compressed Bytes:</Td>
+                  <Tooltip content="Total bytes of compressed chunks (blocks) processed by ingesters">
+                    <Td>Compressed Bytes:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>
                       {logsData?.data.stats.ingester.store?.chunk?.compressedBytes ?? 'NA'} B
@@ -622,10 +733,13 @@ export const LogsTable: React.FC<LogsTableProps> = ({
                   <Td></Td>
                   <Td></Td>
                 </Tr>
+
                 <Tr>
                   <Td></Td>
                   <Td></Td>
-                  <Td>Total Duplicates:</Td>
+                  <Tooltip content="Total of duplicates found by ingesters">
+                    <Td>Total Duplicates:</Td>
+                  </Tooltip>
                   <Td>
                     <strong>
                       {logsData?.data.stats.ingester.store?.chunk?.totalDuplicates ?? 'NA'}
