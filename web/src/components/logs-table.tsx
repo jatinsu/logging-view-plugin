@@ -1,12 +1,5 @@
 import { ResourceLink } from '@openshift-console/dynamic-plugin-sdk';
-import {
-  Alert,
-  Button,
-  Split,
-  SplitItem,
-  TextVariants,
-  Text,
-} from '@patternfly/react-core';
+import { Alert, Button, Split, SplitItem, TextVariants, Text } from '@patternfly/react-core';
 import {
   ExpandableRowContent,
   ISortBy,
@@ -435,9 +428,7 @@ export const LogsTable: React.FC<LogsTableProps> = ({
   const colSpan = isKorrel8rReachable ? columns.length + 3 : columns.length + 2;
   return (
     <div data-test={TestIds.LogsTable}>
-      {showStats && (
-        <StatsTable logsData={logsData}/>
-      )}
+      {showStats && <StatsTable logsData={logsData} />}
       {children}
       <TableComposable
         aria-label="Logs Table"

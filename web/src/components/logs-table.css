@@ -99,16 +99,3 @@
   justify-content: center;
   justify-items: center;
 }
-
-.co-stats__content{
-  background: none;
-}
-
-.summary{
-  padding: 20px;
-  padding-bottom: 40px;
-}
-
-.table-header{
-  width: 205px;
-}
