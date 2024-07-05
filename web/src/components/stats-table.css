@@ -1,10 +1,9 @@
 .co-stats__content{
-    background: none;
-}
-  
-.summary{
     padding: 20px;
     padding-bottom: 40px;
+}
+.co-table{
+    background: none;
 }
 
 .co-table__header{

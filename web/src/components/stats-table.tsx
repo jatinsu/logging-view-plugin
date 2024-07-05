@@ -12,8 +12,8 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
   return (
     <div>
       <div>Statistics</div>
-      <div className="summary">
-        <Table className="co-stats__content" variant="compact" aria-label="Statistics">
+      <div className="co-stats__content">
+        <Table className="co-table" variant="compact" aria-label="Statistics">
           <Thead>
             <Th className="co-table__header">Summary</Th>
             <Th></Th>
