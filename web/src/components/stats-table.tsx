@@ -8,6 +8,42 @@ interface StatsTableProps {
   logsData?: QueryRangeResponse;
 }
 
+const convertBytes = (bytes: number | undefined) => {
+  if (bytes === undefined) {
+    return undefined;
+  }
+
+  // convert Bytes to MB
+  return Math.round((bytes / 1000000) * 100) / 100 + ' MB';
+};
+
+const convertTime = (time: number | undefined) => {
+  if (time === undefined) {
+    return undefined;
+  }
+
+  if (time >= 1) {
+    return time + ' s';
+  }
+  // convert float seconds to ms
+  return Math.round(time * 1000 * 100) / 100 + ' ms';
+};
+
+const convertNano = (time: number | undefined) => {
+  if (time === undefined) {
+    return undefined;
+  }
+  // converts ns to ns
+  time = Math.round((time / 1000000) * 100) / 100;
+
+  // if the time is > 1s
+  if (time >= 1000) {
+    return Math.round((time / 1000) * 100) / 100 + ' s';
+  }
+
+  return Math.round(time * 100) / 100 + ' ms';
+};
+
 export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
   return (
     <div>
@@ -29,7 +65,10 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
                 <Td>Bytes Processed Per Second:</Td>
               </Tooltip>
               <Td>
-                <strong>{logsData?.data.stats.summary.bytesProcessedPerSecond ?? 'NA'} B/s </strong>
+                <strong>
+                  {convertBytes(logsData?.data.stats.summary.bytesProcessedPerSecond) + '/s' ??
+                    'NA'}{' '}
+                </strong>
               </Td>
 
               <Tooltip content="Amount of ingesters reached">
@@ -75,7 +114,9 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
                 <Td>Total Bytes Processed</Td>
               </Tooltip>
               <Td>
-                <strong>{logsData?.data.stats.summary.totalBytesProcessed ?? 'NA'} B</strong>
+                <strong>
+                  {convertBytes(logsData?.data.stats.summary.totalBytesProcessed) ?? 'NA'}
+                </strong>
               </Td>
 
               <Tooltip content="Total batches sent by ingesters">
@@ -89,7 +130,9 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
                 <Td>Chunks Download Time:</Td>
               </Tooltip>
               <Td>
-                <strong>{logsData?.data.stats.querier.store?.chunksDownloadTime ?? 'NA'} s</strong>
+                <strong>
+                  {convertNano(logsData?.data.stats.querier.store?.chunksDownloadTime) ?? 'NA'}
+                </strong>
               </Td>
             </Tr>
 
@@ -113,17 +156,17 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
               </Tooltip>
               <Td>
                 <strong>
-                  {logsData?.data.stats.querier.store?.chunk?.headChunkBytes ?? 'NA'} B
+                  {convertBytes(logsData?.data.stats.querier.store?.chunk?.headChunkBytes) ?? 'NA'}
                 </strong>
               </Td>
             </Tr>
 
             <Tr>
-              <Tooltip content="Total execution time in seconds">
+              <Tooltip content="Total execution time">
                 <Td>Execution Time:</Td>
               </Tooltip>
               <Td>
-                <strong>{logsData?.data.stats.summary.execTime ?? 'NA'} s</strong>
+                <strong>{convertTime(logsData?.data.stats.summary.execTime) ?? 'NA'}</strong>
               </Td>
 
               <Tooltip content="Total chunks found in the index for the current query by ingesters">
@@ -142,11 +185,11 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
             </Tr>
 
             <Tr>
-              <Tooltip content="Total queue time in seconds">
+              <Tooltip content="Total queue time">
                 <Td>Queue Time:</Td>
               </Tooltip>
               <Td>
-                <strong>{logsData?.data.stats.summary.queueTime ?? 'NA'} s</strong>
+                <strong>{convertTime(logsData?.data.stats.summary.queueTime) ?? 'NA'}</strong>
               </Td>
 
               <Tooltip content="Total of chunks downloaded">
@@ -163,7 +206,8 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
               </Tooltip>
               <Td>
                 <strong>
-                  {logsData?.data.stats.querier.store?.chunk?.decompressedBytes ?? 'NA'} B
+                  {convertBytes(logsData?.data.stats.querier.store?.chunk?.decompressedBytes) ??
+                    'NA'}
                 </strong>
               </Td>
             </Tr>
@@ -180,7 +224,9 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
                 <Td>Chunks Download Time:</Td>
               </Tooltip>
               <Td>
-                <strong>{logsData?.data.stats.ingester.store?.chunksDownloadTime ?? 'NA'} s</strong>
+                <strong>
+                  {convertNano(logsData?.data.stats.ingester.store?.chunksDownloadTime) ?? 'NA'}
+                </strong>
               </Td>
 
               <Tooltip content="Total lines decompressed and processed by the store">
@@ -206,7 +252,7 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
               </Tooltip>
               <Td>
                 <strong>
-                  {logsData?.data.stats.ingester.store?.chunk?.headChunkBytes ?? 'NA'} B
+                  {convertBytes(logsData?.data.stats.ingester.store?.chunk?.headChunkBytes) ?? 'NA'}
                 </strong>
               </Td>
 
@@ -215,7 +261,7 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
               </Tooltip>
               <Td>
                 <strong>
-                  {logsData?.data.stats.querier.store?.chunk?.compressedBytes ?? 'NA'} B
+                  {convertBytes(logsData?.data.stats.querier.store?.chunk?.compressedBytes) ?? 'NA'}
                 </strong>
               </Td>
             </Tr>
@@ -260,7 +306,8 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
               </Tooltip>
               <Td>
                 <strong>
-                  {logsData?.data.stats.ingester.store?.chunk?.decompressedBytes ?? 'NA'} B
+                  {convertBytes(logsData?.data.stats.ingester.store?.chunk?.decompressedBytes) ??
+                    'NA'}
                 </strong>
               </Td>
               <Td></Td>
@@ -290,7 +337,8 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
               </Tooltip>
               <Td>
                 <strong>
-                  {logsData?.data.stats.ingester.store?.chunk?.compressedBytes ?? 'NA'} B
+                  {convertBytes(logsData?.data.stats.ingester.store?.chunk?.compressedBytes) ??
+                    'NA'}
                 </strong>
               </Td>
               <Td></Td>
