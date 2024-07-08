@@ -70,8 +70,7 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
               </Tooltip>
               <Td>
                 <strong>
-                  {convertBytes(logsData?.data.stats.summary.bytesProcessedPerSecond) + '/s' ??
-                    'NA'}
+                  {convertBytes(logsData?.data.stats.summary.bytesProcessedPerSecond) ?? 'NA'}/s
                 </strong>
               </Td>
 
