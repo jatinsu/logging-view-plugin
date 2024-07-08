@@ -13,6 +13,10 @@ const convertBytes = (bytes: number | undefined) => {
     return undefined;
   }
 
+  if (bytes <= 1000000) {
+    return bytes + ' B';
+  }
+
   // convert Bytes to MB
   return Math.round((bytes / 1000000) * 100) / 100 + ' MB';
 };
@@ -67,7 +71,7 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
               <Td>
                 <strong>
                   {convertBytes(logsData?.data.stats.summary.bytesProcessedPerSecond) + '/s' ??
-                    'NA'}{' '}
+                    'NA'}
                 </strong>
               </Td>
 
@@ -75,7 +79,7 @@ export const StatsTable: React.FC<StatsTableProps> = ({ logsData }) => {
                 <Td>Total Reached:</Td>
               </Tooltip>
               <Td>
-                <strong>{logsData?.data.stats.ingester.totalReached ?? 'NA'} B</strong>
+                <strong>{convertBytes(logsData?.data.stats.ingester.totalReached) ?? 'NA'} </strong>
               </Td>
 
               <Tooltip content="Total chunks found in the index for the current query">
