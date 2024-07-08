@@ -26,7 +26,7 @@ const convertTime = (time: number | undefined) => {
   }
 
   if (time >= 1) {
-    return Math.round(time *100) + ' s';
+    return Math.round(time * 100) + ' s';
   }
   // convert float seconds to ms
   return Math.round(time * 1000 * 100) / 100 + ' ms';
