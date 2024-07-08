@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { LogQLQuery } from '../logql-query';
 import { TestIds } from '../test-ids';
 import { ExecuteQueryButton } from './execute-query-button';
+import { ExecuteVolumeButton } from './run-query-button';
 import './logs-query-input.css';
 
 interface LogsQueryInputProps {
@@ -77,10 +78,17 @@ export const LogsQueryInput: React.FC<LogsQueryInputProps> = ({
         </FormGroup>
       </Form>
       {onRun && (
-        <ExecuteQueryButton
-          onClick={onRun}
-          isDisabled={value === undefined || value.length === 0 || isDisabled}
-        />
+        <>
+          <ExecuteQueryButton
+            onClick={onRun}
+            isDisabled={value === undefined || value.length === 0 || isDisabled}
+          />
+          <ExecuteVolumeButton
+            onClick={onRun}
+            isDisabled={value === undefined || value.length === 0 || isDisabled}
+          />
+        </>
+        
       )}
     </div>
   );

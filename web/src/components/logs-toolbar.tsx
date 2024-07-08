@@ -17,6 +17,7 @@ import { Severity, severityFromString } from '../severity';
 import { TestIds } from '../test-ids';
 import { notUndefined } from '../value-utils';
 import { ExecuteQueryButton } from './execute-query-button';
+import { ExecuteVolumeButton } from './run-query-button';
 import { AttributeFilter } from './filters/attribute-filter';
 import { AttributeList, Filters } from './filters/filter.types';
 import { LogsQueryInput } from './logs-query-input';
@@ -196,6 +197,7 @@ export const LogsToolbar: React.FC<LogsToolbarProps> = ({
           <>
             <ToolbarGroup>
               <ExecuteQueryButton onClick={onQueryRun} isDisabled={isDisabled} />
+              <ExecuteVolumeButton onClick={onQueryRun} isDisabled={isDisabled} />
             </ToolbarGroup>
             {invalidQueryErrorMessage && (
               <ToolbarGroup>
