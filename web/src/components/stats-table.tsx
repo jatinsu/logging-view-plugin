@@ -3,7 +3,6 @@ import { QueryRangeResponse } from '../logs.types';
 import { Tooltip } from '@patternfly/react-core';
 import { Tbody, Table, Td, Th, Thead, Tr } from '@patternfly/react-table';
 import './stats-table.css';
-
 interface StatsTableProps {
   logsData?: QueryRangeResponse;
 }
@@ -27,7 +26,7 @@ const convertTime = (time: number | undefined) => {
   }
 
   if (time >= 1) {
-    return time + ' s';
+    return Math.round(time *100) + ' s';
   }
   // convert float seconds to ms
   return Math.round(time * 1000 * 100) / 100 + ' ms';
