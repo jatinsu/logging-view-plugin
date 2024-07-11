@@ -190,6 +190,7 @@ export const LogsToolbar: React.FC<LogsToolbarProps> = ({
             onToggle={onShowStatsToggle}
             untoggledText={t('Show Stats')}
             toggledText={t('Hide Stats')}
+            data-test={TestIds.ShowStatsToggle}
           />
         </ToolbarGroup>
 
