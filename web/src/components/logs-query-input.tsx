@@ -88,7 +88,6 @@ export const LogsQueryInput: React.FC<LogsQueryInputProps> = ({
             isDisabled={value === undefined || value.length === 0 || isDisabled}
           />
         </>
-        
       )}
     </div>
   );

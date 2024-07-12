@@ -7,9 +7,15 @@ import {
   isMatrixResult,
   isStreamsResult,
   QueryRangeResponse,
+  VolumeRangeResponse,
   TimeRange,
 } from '../logs.types';
-import { connectToTailSocket, executeHistogramQuery, executeQueryRange } from '../loki-client';
+import {
+  connectToTailSocket,
+  executeHistogramQuery,
+  executeQueryRange,
+  executeVolumeRange,
+} from '../loki-client';
 import { intervalFromTimeRange, numericTimeRange, timeRangeFromDuration } from '../time-range';
 import { millisecondsFromDuration } from '../value-utils';
 
@@ -31,6 +37,9 @@ type State = {
   isLoadingLogsData: boolean;
   isLoadingMoreLogsData: boolean;
   logsData?: QueryRangeResponse;
+  isLoadingVolumeData?: boolean;
+  volumeData?: VolumeRangeResponse;
+  volumeError?: unknown;
   logsError?: unknown;
   hasMoreLogsData?: boolean;
   isStreaming: boolean;
@@ -81,6 +90,17 @@ type Action =
   | {
       type: 'setConfig';
       payload: { config: Config };
+    }
+  | {
+      type: 'volumeRequest';
+    }
+  | {
+      type: 'volumeError';
+      payload: { error: unknown };
+    }
+  | {
+      type: 'volumeResponse';
+      payload: { volumeData: VolumeRangeResponse };
     };
 
 const appendData = (
@@ -170,6 +190,25 @@ const reducer = (state: State, action: Action): State => {
         logsData: appendData(state.logsData, action.payload.logsData, STREAMING_MAX_LOGS_LIMIT),
         hasMoreLogsData: false,
       };
+    case 'volumeRequest':
+      return {
+        ...state,
+        isLoadingVolumeData: true,
+        volumeData: undefined,
+        volumeError: undefined,
+      };
+    case 'volumeResponse':
+      return {
+        ...state,
+        isLoadingVolumeData: true,
+        volumeData: action.payload.volumeData,
+      };
+    case 'volumeError':
+      return {
+        ...state,
+        isLoadingVolumeData: false,
+        volumeError: action.payload.error,
+      };
     case 'moreLogsRequest':
       return {
         ...state,
@@ -224,13 +263,15 @@ export const useLogs = (
   const currentTenant = React.useRef<string>(initialTenant);
   const currentTimeRange = React.useRef<TimeRange>(initialTimeRange);
   const currentTime = React.useRef<number>(Date.now());
-  const lastExecutionTime = React.useRef<{ logs?: number; histogram?: number }>({
+  const lastExecutionTime = React.useRef<{ logs?: number; histogram?: number; volume?: number }>({
     logs: undefined,
     histogram: undefined,
+    volume: undefined,
   });
   const currentDirection = React.useRef<Direction>('backward');
   const logsAbort = React.useRef<() => void | undefined>();
   const histogramAbort = React.useRef<() => void | undefined>();
+  const volumeAbort = React.useRef<() => void | undefined>();
   const ws = React.useRef<WSFactory | null>();
 
   const [
@@ -241,6 +282,7 @@ export const useLogs = (
       isLoadingLogsData,
       isLoadingMoreLogsData,
       histogramError,
+      volumeData,
       logsError,
       hasMoreLogsData,
       isStreaming,
@@ -479,6 +521,65 @@ export const useLogs = (
     }
   };
 
+  const getVolume = async ({
+    query,
+    tenant,
+    timeRange,
+    namespace,
+  }: {
+    query: string;
+    tenant?: string;
+    timeRange?: TimeRange;
+    namespace?: string;
+  }) => {
+    if (query.length === 0) {
+      dispatch({ type: 'volumeError', payload: { error: new Error('Query is empty') } });
+      return;
+    }
+
+    // Throttle requests
+    if (lastExecutionTime.current.volume && Date.now() - lastExecutionTime.current.volume < 50) {
+      return;
+    }
+
+    try {
+      currentQuery.current = query;
+      currentTenant.current = tenant ?? currentTenant.current;
+      currentTime.current = Date.now();
+      lastExecutionTime.current.logs = Date.now();
+      currentTimeRange.current = timeRange ?? currentTimeRange.current;
+
+      const { start, end } = numericTimeRange(currentTimeRange.current);
+
+      dispatch({ type: 'volumeRequest' });
+
+      if (volumeAbort.current) {
+        volumeAbort.current();
+      }
+
+      await fetchConfig();
+
+      const { request, abort } = executeVolumeRange({
+        query,
+        start,
+        end,
+        config: currentConfig.current,
+        tenant: currentTenant.current,
+        namespace,
+      });
+
+      volumeAbort.current = abort;
+
+      const volumeResponse = await request();
+
+      dispatch({ type: 'volumeResponse', payload: { volumeData: volumeResponse } });
+    } catch (error) {
+      if (!isAbortError(error)) {
+        dispatch({ type: 'volumeError', payload: { error } });
+      }
+    }
+  };
+
   const getHistogram = async ({
     query,
     tenant,
@@ -548,12 +649,14 @@ export const useLogs = (
 
   return {
     logsData,
+    volumeData,
     isLoadingLogsData,
     isLoadingMoreLogsData,
     isStreaming,
     histogramData,
     isLoadingHistogramData,
     getLogs,
+    getVolume,
     getMoreLogs,
     hasMoreLogsData,
     logsError,

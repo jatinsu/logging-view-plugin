@@ -65,6 +65,17 @@ export type QueryRangeResponse<T = MatrixResult | StreamsResult> = {
   };
 };
 
+export type VolumeRangeResponse<T = MatrixResult> = {
+  status: string;
+  data: T & {
+    stats: {
+      ingester?: Ingester;
+      querier?: Querier;
+      summary?: Record<string, number>;
+    };
+  };
+};
+
 export type Rule = {
   query?: string;
   labels?: Record<string, string>;
