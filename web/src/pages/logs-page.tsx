@@ -63,6 +63,7 @@ const LogsPage: React.FC = () => {
     logsData,
     logsError,
     getLogs,
+    getVolume,
     getMoreLogs,
     hasMoreLogsData,
     getHistogram,
@@ -90,6 +91,10 @@ const LogsPage: React.FC = () => {
     if (isHistogramVisible) {
       getHistogram({ query: queryToUse ?? query, tenant, timeRange });
     }
+  };
+
+  const runVolume = () => {
+    getVolume({ query, tenant, timeRange });
   };
 
   const handleFiltersChange = (selectedFilters?: Filters) => {
@@ -202,6 +207,7 @@ const LogsPage: React.FC = () => {
           query={query}
           onQueryChange={handleQueryChange}
           onQueryRun={runQuery}
+          onVolumeRun={runVolume}
           onTenantSelect={setTenantInURL}
           tenant={tenant}
           isStreaming={isStreaming}

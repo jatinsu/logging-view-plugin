@@ -120,8 +120,8 @@ const LogsDetailPage: React.FC<LogsDetailPageProps> = ({
   };
 
   const runVolume = () => {
-    getVolume({ query, tenant: tenant.current, namespace, timeRange});
-  }
+    getVolume({ query, tenant: tenant.current, namespace, timeRange });
+  };
 
   const handleFiltersChange = (selectedFilters?: Filters) => {
     setFilters(selectedFilters);

@@ -68,6 +68,7 @@ const LogsDevPage: React.FC<LogsDevPageProps> = ({ ns: namespaceFromProps }) => 
     logsData,
     logsError,
     getLogs,
+    getVolume,
     getMoreLogs,
     hasMoreLogsData,
     getHistogram,
@@ -100,6 +101,10 @@ const LogsDevPage: React.FC<LogsDevPageProps> = ({ ns: namespaceFromProps }) => 
     if (isHistogramVisible) {
       getHistogram({ query: queryToUse ?? query, timeRange, tenant });
     }
+  };
+  
+  const runVolume = () => {
+    getVolume({ query, tenant, namespace, timeRange });
   };
 
   const handleFiltersChange = (selectedFilters?: Filters) => {
@@ -236,6 +241,7 @@ const LogsDevPage: React.FC<LogsDevPageProps> = ({ ns: namespaceFromProps }) => 
           query={query}
           onQueryChange={handleQueryChange}
           onQueryRun={runQuery}
+          onVolumeRun={runVolume}
           invalidQueryErrorMessage={
             isNamespaceFilterEmpty ? t('Please select a namespace') : undefined
           }
