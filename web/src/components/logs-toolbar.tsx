@@ -31,6 +31,7 @@ interface LogsToolbarProps {
   query: string;
   onQueryChange?: (query: string) => void;
   onQueryRun?: () => void;
+  onVolumeRun?: () => void;
   invalidQueryErrorMessage?: string | null;
   tenant?: string;
   onTenantSelect?: (tenant: string) => void;
@@ -64,6 +65,7 @@ export const LogsToolbar: React.FC<LogsToolbarProps> = ({
   query,
   onQueryChange,
   onQueryRun,
+  onVolumeRun,
   invalidQueryErrorMessage,
   tenant = 'application',
   onTenantSelect,
@@ -198,7 +200,7 @@ export const LogsToolbar: React.FC<LogsToolbarProps> = ({
           <>
             <ToolbarGroup>
               <ExecuteQueryButton onClick={onQueryRun} isDisabled={isDisabled} />
-              <ExecuteVolumeButton onClick={onQueryRun} isDisabled={isDisabled} />
+              <ExecuteVolumeButton onClick={onVolumeRun} isDisabled={isDisabled} />
             </ToolbarGroup>
             {invalidQueryErrorMessage && (
               <ToolbarGroup>

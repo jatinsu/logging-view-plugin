@@ -63,6 +63,7 @@ const LogsDetailPage: React.FC<LogsDetailPageProps> = ({
     getMoreLogs,
     hasMoreLogsData,
     toggleStreaming,
+    getVolume,
     getHistogram,
     histogramData,
     isLoadingHistogramData,
@@ -117,6 +118,10 @@ const LogsDetailPage: React.FC<LogsDetailPageProps> = ({
       getHistogram({ query, tenant: tenant.current, namespace, timeRange });
     }
   };
+
+  const runVolume = () => {
+    getVolume({ query, tenant: tenant.current, namespace, timeRange});
+  }
 
   const handleFiltersChange = (selectedFilters?: Filters) => {
     setFilters(selectedFilters);
@@ -206,6 +211,7 @@ const LogsDetailPage: React.FC<LogsDetailPageProps> = ({
           query={query}
           onQueryChange={handleQueryChange}
           onQueryRun={runQuery}
+          onVolumeRun={runVolume}
           isStreaming={isStreaming}
           onStreamingToggle={handleToggleStreaming}
           showResources={areResourcesShown}
