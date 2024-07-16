@@ -61,6 +61,7 @@ const LogsPage: React.FC = () => {
     isLoadingHistogramData,
     isStreaming,
     logsData,
+    volumeData,
     logsError,
     getLogs,
     getVolume,
@@ -241,6 +242,7 @@ const LogsPage: React.FC = () => {
         ) : (
           <LogsTable
             logsData={logsData}
+            volumeData={volumeData}
             onLoadMore={handleLoadMoreData}
             onSortByDate={handleSortByDate}
             isLoading={isLoadingLogsData}

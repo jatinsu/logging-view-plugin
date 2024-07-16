@@ -66,6 +66,7 @@ const LogsDevPage: React.FC<LogsDevPageProps> = ({ ns: namespaceFromProps }) => 
     isLoadingHistogramData,
     isStreaming,
     logsData,
+    volumeData,
     logsError,
     getLogs,
     getVolume,
@@ -102,7 +103,7 @@ const LogsDevPage: React.FC<LogsDevPageProps> = ({ ns: namespaceFromProps }) => 
       getHistogram({ query: queryToUse ?? query, timeRange, tenant });
     }
   };
-  
+
   const runVolume = () => {
     getVolume({ query, tenant, namespace, timeRange });
   };
@@ -277,6 +278,7 @@ const LogsDevPage: React.FC<LogsDevPageProps> = ({ ns: namespaceFromProps }) => 
         ) : (
           <LogsTable
             logsData={logsData}
+            volumeData={volumeData}
             onLoadMore={handleLoadMoreData}
             onSortByDate={handleSortByDate}
             isLoading={isLoadingLogsData}

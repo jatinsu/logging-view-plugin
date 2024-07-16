@@ -199,7 +199,7 @@ export const LogsToolbar: React.FC<LogsToolbarProps> = ({
         {!isQueryShown && (
           <>
             <ToolbarGroup>
-              <ExecuteQueryButton onClick={onQueryRun} isDisabled={isDisabled} />              
+              <ExecuteQueryButton onClick={onQueryRun} isDisabled={isDisabled} />
             </ToolbarGroup>
             {invalidQueryErrorMessage && (
               <ToolbarGroup>

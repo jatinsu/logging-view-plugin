@@ -18,7 +18,13 @@ import { DateFormat, dateToFormat } from '../date-utils';
 import { useKorrel8r } from '../hooks/useKorrel8r';
 import { listGoals } from '../korrel8r-client';
 import { Korrel8rResponse } from '../korrel8r.types';
-import { Direction, QueryRangeResponse, StreamLogData, isStreamsResult } from '../logs.types';
+import {
+  Direction,
+  QueryRangeResponse,
+  StreamLogData,
+  isStreamsResult,
+  VolumeRangeResponse,
+} from '../logs.types';
 import { severityFromString } from '../severity';
 import { TestIds } from '../test-ids';
 import { notUndefined } from '../value-utils';
@@ -26,10 +32,12 @@ import { CenteredContainer } from './centered-container';
 import { ErrorMessage } from './error-message';
 import { LogDetail } from './log-detail';
 import { StatsTable } from './stats-table';
+import { VolumeGraph } from './volume-graph';
 import './logs-table.css';
 
 interface LogsTableProps {
   logsData?: QueryRangeResponse;
+  volumeData?: VolumeRangeResponse;
   isLoading?: boolean;
   hasMoreLogsData?: boolean;
   isLoadingMore?: boolean;
@@ -355,6 +363,7 @@ const MetricsLink: React.FC<MetricsLinkProps> = ({ container, logType, namespace
 
 export const LogsTable: React.FC<LogsTableProps> = ({
   logsData,
+  volumeData,
   isLoading,
   isLoadingMore,
   onLoadMore,
@@ -428,6 +437,7 @@ export const LogsTable: React.FC<LogsTableProps> = ({
   const colSpan = isKorrel8rReachable ? columns.length + 3 : columns.length + 2;
   return (
     <div data-test={TestIds.LogsTable}>
+      {<VolumeGraph volumeData={volumeData} />}
       {showStats && <StatsTable logsData={logsData} />}
       {children}
       <TableComposable

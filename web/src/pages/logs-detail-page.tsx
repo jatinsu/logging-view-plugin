@@ -58,6 +58,7 @@ const LogsDetailPage: React.FC<LogsDetailPageProps> = ({
     isLoadingMoreLogsData,
     isStreaming,
     logsData,
+    volumeData,
     logsError,
     getLogs,
     getMoreLogs,
@@ -244,6 +245,7 @@ const LogsDetailPage: React.FC<LogsDetailPageProps> = ({
         ) : (
           <LogsTable
             logsData={logsData}
+            volumeData={volumeData}
             isStreaming={isStreaming}
             onLoadMore={handleLoadMoreData}
             onSortByDate={handleSortByDate}
