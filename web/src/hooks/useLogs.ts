@@ -169,6 +169,7 @@ const reducer = (state: State, action: Action): State => {
         logsError: undefined,
         hasMoreLogsData: false,
         isStreaming: false,
+        isLoadingVolumeData: false,
       };
     case 'startStreaming':
       return {
@@ -280,6 +281,7 @@ export const useLogs = (
       histogramData,
       isLoadingHistogramData,
       isLoadingLogsData,
+      isLoadingVolumeData,
       isLoadingMoreLogsData,
       histogramError,
       volumeData,
@@ -293,6 +295,7 @@ export const useLogs = (
   ] = React.useReducer(reducer, {
     isLoadingHistogramData: false,
     isLoadingLogsData: false,
+    isLoadingVolumeData: false,
     isLoadingMoreLogsData: false,
     hasMoreLogsData: false,
     isStreaming: false,
@@ -655,6 +658,7 @@ export const useLogs = (
     isStreaming,
     histogramData,
     isLoadingHistogramData,
+    isLoadingVolumeData,
     getLogs,
     getVolume,
     getMoreLogs,
