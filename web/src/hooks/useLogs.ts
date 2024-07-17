@@ -37,10 +37,11 @@ type State = {
   isLoadingLogsData: boolean;
   isLoadingMoreLogsData: boolean;
   logsData?: QueryRangeResponse;
+  logsError?: unknown;
   isLoadingVolumeData?: boolean;
   volumeData?: VolumeRangeResponse;
   volumeError?: unknown;
-  logsError?: unknown;
+  showVolumeGraph?: boolean;
   hasMoreLogsData?: boolean;
   isStreaming: boolean;
   config: Config;
@@ -153,6 +154,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         isLoadingHistogramData: false,
+        showVolumeGraph: false,
         histogramData: action.payload.histogramData,
       };
     case 'histogramError':
@@ -201,7 +203,8 @@ const reducer = (state: State, action: Action): State => {
     case 'volumeResponse':
       return {
         ...state,
-        isLoadingVolumeData: true,
+        isLoadingVolumeData: false,
+        showVolumeGraph: true,
         volumeData: action.payload.volumeData,
       };
     case 'volumeError':
@@ -220,6 +223,7 @@ const reducer = (state: State, action: Action): State => {
       return {
         ...state,
         isLoadingLogsData: false,
+        showVolumeGraph: false,
         logsData: action.payload.logsData,
         hasMoreLogsData: hasMoreLogs(action.payload.logsData, state.config.logsLimit),
       };
@@ -286,6 +290,8 @@ export const useLogs = (
       histogramError,
       volumeData,
       logsError,
+      volumeError,
+      showVolumeGraph,
       hasMoreLogsData,
       isStreaming,
       config,
@@ -659,6 +665,8 @@ export const useLogs = (
     histogramData,
     isLoadingHistogramData,
     isLoadingVolumeData,
+    volumeError,
+    showVolumeGraph,
     getLogs,
     getVolume,
     getMoreLogs,

@@ -29,6 +29,7 @@ import { useLogs } from '../hooks/useLogs';
 import { defaultQueryFromTenant, useURLState } from '../hooks/useURLState';
 import { Direction, isMatrixResult } from '../logs.types';
 import { TestIds } from '../test-ids';
+import { VolumeGraph } from '../components/volume-graph';
 import { CenteredContainer } from '../components/centered-container';
 
 const LogsPage: React.FC = () => {
@@ -59,6 +60,9 @@ const LogsPage: React.FC = () => {
     isLoadingLogsData,
     isLoadingMoreLogsData,
     isLoadingHistogramData,
+    isLoadingVolumeData,
+    volumeError,
+    showVolumeGraph,
     isStreaming,
     logsData,
     volumeData,
@@ -239,10 +243,22 @@ const LogsPage: React.FC = () => {
               />
             </CardBody>
           </Card>
+        ) : showVolumeGraph ? (
+          <Card>
+            <CardBody>
+              <VolumeGraph
+                volumeData={volumeData}
+                timeRange={timeRange}
+                isLoading={isLoadingVolumeData}
+                error={volumeError}
+                height={350}
+                displayLegendTable
+              />
+            </CardBody>
+          </Card>
         ) : (
           <LogsTable
             logsData={logsData}
-            volumeData={volumeData}
             onLoadMore={handleLoadMoreData}
             onSortByDate={handleSortByDate}
             isLoading={isLoadingLogsData}

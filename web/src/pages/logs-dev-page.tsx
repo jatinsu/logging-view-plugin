@@ -22,6 +22,7 @@ import { useLogs } from '../hooks/useLogs';
 import { defaultQueryFromTenant, useURLState } from '../hooks/useURLState';
 import { Direction, isMatrixResult } from '../logs.types';
 import { TestIds } from '../test-ids';
+import { VolumeGraph } from '../components/volume-graph';
 import { getInitialTenantFromNamespace } from '../value-utils';
 
 /*
@@ -66,8 +67,11 @@ const LogsDevPage: React.FC<LogsDevPageProps> = ({ ns: namespaceFromProps }) => 
     isLoadingHistogramData,
     isStreaming,
     logsData,
-    volumeData,
     logsError,
+    volumeData,
+    isLoadingVolumeData,
+    volumeError,
+    showVolumeGraph,
     getLogs,
     getVolume,
     getMoreLogs,
@@ -275,10 +279,22 @@ const LogsDevPage: React.FC<LogsDevPageProps> = ({ ns: namespaceFromProps }) => 
               />
             </CardBody>
           </Card>
+        ) : showVolumeGraph ? (
+          <Card>
+            <CardBody>
+              <VolumeGraph
+                volumeData={volumeData}
+                timeRange={timeRange}
+                isLoading={isLoadingVolumeData}
+                error={volumeError}
+                height={350}
+                displayLegendTable
+              />
+            </CardBody>
+          </Card>
         ) : (
           <LogsTable
             logsData={logsData}
-            volumeData={volumeData}
             onLoadMore={handleLoadMoreData}
             onSortByDate={handleSortByDate}
             isLoading={isLoadingLogsData}

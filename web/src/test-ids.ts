@@ -5,6 +5,7 @@ export enum TestIds {
   LogsHistogram = 'LogsHistogram',
   LogsTable = 'LogsTable',
   LogsMetrics = 'LogsMetrics',
+  VolumeGraph = 'VolumeGraph',
   LogsQueryInput = 'LogsQueryInput',
   ExecuteQueryButton = 'ExecuteQueryButton',
   TenantDropdown = 'TenantDropdown',

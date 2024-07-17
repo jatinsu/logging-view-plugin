@@ -1,54 +1,265 @@
-import React from 'react';
-import { VolumeRangeResponse } from '../logs.types';
-import './volume-graph.css';
 import {
   Chart,
   ChartAxis,
   ChartGroup,
+  ChartLegendTooltip,
   ChartLine,
-  ChartVoronoiContainer,
+  ChartThemeColor,
+  createContainer,
+  getThemeColors,
 } from '@patternfly/react-charts';
+import { Alert } from '@patternfly/react-core';
+import { InnerScrollContainer, Table, Tbody, Td, Th, Thead, Tr } from '@patternfly/react-table';
+import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { DateFormat, dateToFormat, getTimeFormatFromTimeRange } from '../date-utils';
+import { useRefWidth } from '../hooks/useRefWidth';
+import { VolumeRangeResponse, TimeRange, isMatrixResult } from '../logs.types';
+import { TestIds } from '../test-ids';
+import { defaultTimeRange, intervalFromTimeRange, numericTimeRange } from '../time-range';
+import { CenteredContainer } from './centered-container';
+import './volume-graph.css';
 
+const colors = getThemeColors(ChartThemeColor.multiUnordered).line.colorScale;
+
+type MetricsData = {
+  name: string;
+  labels: Record<string, string>;
+  data: Array<{ name: string; x: number; y: number }>;
+};
+type Domain = [number, number];
 interface VolumeGraphProps {
   volumeData?: VolumeRangeResponse;
+  timeRange?: TimeRange;
+  isLoading?: boolean;
+  error?: unknown;
+  height?: number;
+  displayLegendTable?: boolean;
 }
 
-export const VolumeGraph: React.FC<VolumeGraphProps> = ({ volumeData }) => {
-  const data: { x: Date; y: number }[] =
-    volumeData?.data.result[0].values.map(([x, y]) => ({
-      x: new Date(Number(x) * 1000),
-      y: Number(y), // Convert y value to number
-    })) || [];
+const GRAPH_HEIGHT = 250;
+
+const matrixToMetricsData = ({
+  response,
+  timeRange,
+}: {
+  response?: VolumeRangeResponse;
+  timeRange: TimeRange;
+}): {
+  data: Array<MetricsData> | undefined;
+  xDomain: Domain;
+  yDomain: Domain;
+} => {
+  if (!response) {
+    return { data: undefined, xDomain: [0, 1], yDomain: [0, 1] };
+  }
+
+  if (!isMatrixResult(response.data)) {
+    return { data: undefined, xDomain: [0, 1], yDomain: [0, 1] };
+  }
+
+  const numericTimeRangeValue = numericTimeRange(timeRange);
+
+  const values = response.data.result;
+  const xDomain: Domain = [numericTimeRangeValue.start, numericTimeRangeValue.end];
+  const yDomain: Domain = [Number.MAX_VALUE, Number.MIN_VALUE];
+
+  const data = values.map((value) => {
+    const seriesName = JSON.stringify(value.metric);
+    const seriesLabels = value.metric;
+
+    return {
+      name: seriesName,
+      labels: seriesLabels,
+      data: value.values.map((coordinate) => {
+        const time = parseInt(String(coordinate[0])) * 1000;
+
+        if (time < xDomain[0]) {
+          xDomain[0] = time;
+        }
+        if (time > xDomain[1]) {
+          xDomain[1] = time;
+        }
+
+        const y = parseFloat(String(coordinate[1]));
+
+        if (y < yDomain[0]) {
+          yDomain[0] = y;
+        }
+        if (y > yDomain[1]) {
+          yDomain[1] = y;
+        }
+
+        return { x: time, y, name: seriesName, labels: seriesLabels };
+      }),
+    };
+  });
+
+  return { data, xDomain, yDomain };
+};
+
+const CursorVoronoiContainer = createContainer('voronoi', 'cursor');
+
+export const VolumeGraph: React.FC<VolumeGraphProps> = ({
+  volumeData,
+  isLoading,
+  error,
+  timeRange,
+  height = GRAPH_HEIGHT,
+  displayLegendTable = false,
+}) => {
+  const { t } = useTranslation('plugin__logging-view-plugin');
+
+  const [containerRef, width] = useRefWidth();
+  const [timeRangeValue, setTimeRangeValue] = React.useState(numericTimeRange(timeRange));
+  const { data, xDomain, yDomain } = React.useMemo(
+    () => matrixToMetricsData({ response: volumeData, timeRange: timeRange ?? defaultTimeRange() }),
+    [volumeData],
+  );
+
+  React.useEffect(() => {
+    setTimeRangeValue(numericTimeRange(timeRange));
+  }, [timeRange]);
+
+  const toolTipData = React.useMemo(
+    () =>
+      data?.map((series) => ({
+        childName: series.name,
+        name: displayLegendTable ? undefined : series.name,
+      })),
+    [data],
+  );
+
+  const { legendTableData, legendTableColumns } = React.useMemo(() => {
+    const tableData: Array<{ childName: string; labels: Record<string, string> }> = [];
+    const columns = new Set<string>();
+
+    if (data) {
+      for (const metricsData of data) {
+        tableData.push({
+          childName: metricsData.name,
+          labels: metricsData.labels,
+        });
+
+        for (const label in metricsData.labels) {
+          columns.add(label);
+        }
+      }
+    }
+
+    return { legendTableData: tableData, legendTableColumns: Array.from(columns) };
+  }, [data]);
+
+  const intervalValue = intervalFromTimeRange(timeRangeValue);
+
+  const dataIsEmpty = data ? data?.length === 0 : false;
 
   return (
-    <div style={{ height: '600px' }}>
-      <Chart
-        ariaDesc="Volume over time"
-        ariaTitle="Volume chart"
-        maxDomain={{ y: Math.max(...data.map((d) => d.y)) * 1.1 }}
-        minDomain={{ y: Math.min(...data.map((d) => d.y)) * 0.9 }}
-        padding={{ bottom: 50, left: 100, right: 50, top: 50 }}
-        containerComponent={
-          <ChartVoronoiContainer
-            labels={({ datum }) => `${datum.x}: ${datum.y}`}
-            constrainToVisibleArea
+    <div ref={containerRef} data-test={TestIds.VolumeGraph}>
+      {error ? (
+        <CenteredContainer>
+          <Alert
+            variant="danger"
+            isInline
+            isPlain
+            title={(error as Error).message || String(error)}
           />
-        }
-      >
-        <ChartAxis
-          tickFormat={(t) => {
-            if (typeof t === 'number') {
-              const date = new Date(t);
-              return `${date.getHours()}:${date.getMinutes()}`;
+        </CenteredContainer>
+      ) : isLoading ? (
+        <CenteredContainer>{t('Loading...')}</CenteredContainer>
+      ) : dataIsEmpty ? (
+        <CenteredContainer>
+          <Alert variant="warning" isInline isPlain title={t('No datapoints found')} />
+        </CenteredContainer>
+      ) : data ? (
+        <div>
+          <Chart
+            containerComponent={
+              <CursorVoronoiContainer
+                cursorDimension="x"
+                activateData={false}
+                labels={({ datum }: { datum: { y: number } }) => datum.y}
+                labelComponent={
+                  <ChartLegendTooltip
+                    legendData={toolTipData}
+                    title={(datum: { x: number }) =>
+                      dateToFormat(datum.x, getTimeFormatFromTimeRange(timeRangeValue))
+                    }
+                  />
+                }
+                constrainToVisibleArea
+                mouseFollowTooltips
+                voronoiPadding={0}
+              />
             }
-            return `${t.getHours()}:${t.getMinutes()}`;
-          }}
-        />
-        <ChartAxis dependentAxis showGrid tickFormat={(t) => `${t / 1000000}M`} />
-        <ChartGroup>
-          <ChartLine data={data} />
-        </ChartGroup>
-      </Chart>
+            height={height}
+            width={width}
+            name="alert metrics"
+            scale={{ x: 'time', y: 'linear' }}
+            themeColor={ChartThemeColor.multiUnordered}
+            padding={{
+              bottom: 40,
+              left: 100,
+              right: 20,
+              top: 10,
+            }}
+            domainPadding={{ x: [30, 25] }}
+            domain={{ x: xDomain, y: yDomain }}
+          >
+            <ChartAxis
+              tickCount={60}
+              fixLabelOverlap
+              tickFormat={(tick: number) =>
+                dateToFormat(
+                  tick,
+                  intervalValue < 60 * 1000 ? DateFormat.TimeMed : DateFormat.TimeShort,
+                )
+              }
+            />
+            <ChartAxis dependentAxis showGrid />
+            <ChartGroup>
+              {data.map((series) => (
+                <ChartLine name={series.name} key={series.name} data={series.data} />
+              ))}
+            </ChartGroup>
+          </Chart>
+          {displayLegendTable && (
+            <InnerScrollContainer>
+              <Table variant="compact">
+                <Thead>
+                  <Tr>
+                    <Th isStickyColumn stickyMinWidth="20px" style={{ width: '20px' }}></Th>
+                    {legendTableColumns.map((column) => (
+                      <Th modifier="nowrap" key={column}>
+                        {column}
+                      </Th>
+                    ))}
+                  </Tr>
+                </Thead>
+                <Tbody>
+                  {legendTableData?.map((series, index) => (
+                    <Tr key={series.childName}>
+                      <Th isStickyColumn stickyMinWidth="20px" style={{ width: '20px' }}>
+                        <div
+                          className="co-volume-graph-legent-table-color"
+                          style={{ backgroundColor: colors[index] }}
+                        />
+                      </Th>
+                      {legendTableColumns.map((column) => (
+                        <Td key={`${column}-${index}`}>{series.labels[column]}</Td>
+                      ))}
+                    </Tr>
+                  ))}
+                </Tbody>
+              </Table>
+            </InnerScrollContainer>
+          )}
+        </div>
+      ) : (
+        <CenteredContainer>
+          <Alert variant="danger" isInline isPlain title={t('Invalid data')} />
+        </CenteredContainer>
+      )}
     </div>
   );
 };
