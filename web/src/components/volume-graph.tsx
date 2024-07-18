@@ -194,7 +194,7 @@ export const VolumeGraph: React.FC<VolumeGraphProps> = ({
             }
             height={height}
             width={width}
-            name="alert metrics"
+            name="volume graph"
             scale={{ x: 'time', y: 'linear' }}
             themeColor={ChartThemeColor.multiUnordered}
             padding={{
