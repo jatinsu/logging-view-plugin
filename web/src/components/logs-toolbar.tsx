@@ -17,7 +17,7 @@ import { Severity, severityFromString } from '../severity';
 import { TestIds } from '../test-ids';
 import { notUndefined } from '../value-utils';
 import { ExecuteQueryButton } from './execute-query-button';
-import { ExecuteVolumeButton } from './run-query-button';
+import { ExecuteVolumeButton } from './execute-volume-button';
 import { AttributeFilter } from './filters/attribute-filter';
 import { AttributeList, Filters } from './filters/filter.types';
 import { LogsQueryInput } from './logs-query-input';
@@ -201,6 +201,9 @@ export const LogsToolbar: React.FC<LogsToolbarProps> = ({
             <ToolbarGroup>
               <ExecuteQueryButton onClick={onQueryRun} isDisabled={isDisabled} />
             </ToolbarGroup>
+            <ToolbarGroup>
+              <ExecuteVolumeButton onClick={onVolumeRun} isDisabled={isDisabled} />
+            </ToolbarGroup>
             {invalidQueryErrorMessage && (
               <ToolbarGroup>
                 <Alert variant="danger" isInline isPlain title={invalidQueryErrorMessage} />
@@ -208,7 +211,6 @@ export const LogsToolbar: React.FC<LogsToolbarProps> = ({
             )}
           </>
         )}
-        <ExecuteVolumeButton onClick={onVolumeRun} isDisabled={isDisabled} />
 
         <Spacer />
 
@@ -233,6 +235,7 @@ export const LogsToolbar: React.FC<LogsToolbarProps> = ({
         <LogsQueryInput
           value={query}
           onRun={onQueryRun}
+          onVolumeRun={onVolumeRun}
           onChange={onQueryChange}
           invalidQueryErrorMessage={invalidQueryErrorMessage}
           isDisabled={isDisabled}

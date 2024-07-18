@@ -8,7 +8,7 @@ export const ExecuteVolumeButton: React.FC<ButtonProps> = ({ onClick, isDisabled
 
   return (
     <Button
-      variant="primary"
+      variant="secondary"
       data-test={TestIds.ExecuteQueryButton}
       onClick={onClick}
       isDisabled={isDisabled}
