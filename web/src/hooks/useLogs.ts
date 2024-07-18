@@ -568,6 +568,10 @@ export const useLogs = (
 
       await fetchConfig();
 
+      // Volume API only accepts labels, so have to extract them from the query.
+      // Only grabs the data within the { }
+      query = query.match(/\{.*\}/g)?.[0] ?? query;
+
       const { request, abort } = executeVolumeRange({
         query,
         start,
