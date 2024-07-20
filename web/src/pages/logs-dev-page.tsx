@@ -266,19 +266,6 @@ const LogsDevPage: React.FC<LogsDevPageProps> = ({ ns: namespaceFromProps }) => 
 
         {isLoadingLogsData ? (
           <CenteredContainer>{t('Loading...')}</CenteredContainer>
-        ) : resultIsMetric ? (
-          <Card>
-            <CardBody>
-              <LogsMetrics
-                logsData={logsData}
-                timeRange={timeRange}
-                isLoading={isLoadingLogsData}
-                error={logsError}
-                height={350}
-                displayLegendTable
-              />
-            </CardBody>
-          </Card>
         ) : showVolumeGraph ? (
           <Card>
             <CardBody>
@@ -287,6 +274,19 @@ const LogsDevPage: React.FC<LogsDevPageProps> = ({ ns: namespaceFromProps }) => 
                 timeRange={timeRange}
                 isLoading={isLoadingVolumeData}
                 error={volumeError}
+                height={350}
+                displayLegendTable
+              />
+            </CardBody>
+          </Card>
+        ) : resultIsMetric ? (
+          <Card>
+            <CardBody>
+              <LogsMetrics
+                logsData={logsData}
+                timeRange={timeRange}
+                isLoading={isLoadingLogsData}
+                error={logsError}
                 height={350}
                 displayLegendTable
               />
