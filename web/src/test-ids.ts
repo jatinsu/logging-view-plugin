@@ -8,6 +8,7 @@ export enum TestIds {
   VolumeGraph = 'VolumeGraph',
   LogsQueryInput = 'LogsQueryInput',
   ExecuteQueryButton = 'ExecuteQueryButton',
+  ExecuteVolumeButton = 'ExecuteVolumeButton',
   TenantDropdown = 'TenantDropdown',
   SeverityDropdown = 'SeverityDropdown',
   ToogleStreamingButton = 'ToogleStreamingButton',
