@@ -79,18 +79,20 @@ export const LogsQueryInput: React.FC<LogsQueryInputProps> = ({
           />
         </FormGroup>
       </Form>
-      {onRun && (
-        <>
-          <ExecuteQueryButton
-            onClick={onRun}
-            isDisabled={value === undefined || value.length === 0 || isDisabled}
-          />
-          <ExecuteVolumeButton
-            onClick={onVolumeRun}
-            isDisabled={value === undefined || value.length === 0 || isDisabled}
-          />
-        </>
-      )}
+        {onRun && (
+            <ExecuteQueryButton
+              onClick={onRun}
+              isDisabled={value === undefined || value.length === 0 || isDisabled}
+            />
+        )}
+        <div className='co-logs-expression-input__volumeButton'>
+          {onVolumeRun && (
+              <ExecuteVolumeButton
+                onClick={onVolumeRun}
+                isDisabled={value === undefined || value.length === 0 || isDisabled}
+              />
+          )}
+        </div>
     </div>
   );
 };
